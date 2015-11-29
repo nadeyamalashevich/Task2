@@ -13,10 +13,12 @@ namespace Task2
     [TestClass]
     public class OnlinerTests
     {
-        [TestMethod]
-        public void TestMethod1()
+        private IWebDriver chromeDriver;
+        private IWebDriver firefoxDriver;
+        private IWebDriver explorerDriver;
+
+        private void CatalogTest(IWebDriver driver)
         {
-            IWebDriver driver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory);
             driver.Navigate().GoToUrl("http://onliner.by/");
 
             IWebElement enterElem = driver.FindElement(By.XPath(@"//*[@id=""userbar""]/div[2]/div[1]"));
@@ -24,7 +26,7 @@ namespace Task2
 
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
             wait.Until(d => d.FindElement(By.CssSelector(@"#auth-container__forms > div > div.auth-box__field > form > div:nth-child(1) > div:nth-child(1) > input")));
-            
+
             IWebElement emailElem = driver.FindElement(By.CssSelector(@"#auth-container__forms > div > div.auth-box__field > form > div:nth-child(1) > div:nth-child(1) > input"));
             IWebElement passwordElem = driver.FindElement(By.CssSelector(@"#auth-container__forms > div > div.auth-box__field > form > div:nth-child(1) > div:nth-child(2) > input"));
             emailElem.SendKeys(@"9nadeya15@mail.ru");
@@ -53,8 +55,25 @@ namespace Task2
 
             IWebElement exitElem = driver.FindElement(By.XPath(@"//*[@id=""userbar""]/div[1]/a"));
             exitElem.Click();
+        }
 
-            driver.Quit();
+        [TestInitialize]
+        public void DriverInitializer()
+        {
+            chromeDriver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory);
+            //firefoxDriver = new FirefoxDriver();
+        }
+
+        [TestMethod]
+        public void CatalogTestChrome()
+        {
+            CatalogTest(chromeDriver);
+        }
+
+        [TestCleanup]
+        public void DisposeDriver()
+        {
+            chromeDriver.Quit();
         }
     }
 }
