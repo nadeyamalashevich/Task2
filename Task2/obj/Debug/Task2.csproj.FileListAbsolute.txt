@@ -1,0 +1,34 @@
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\Task2.dll
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\Task2.pdb
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\Selenium.WebDriverBackedSelenium.dll
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\ThoughtWorks.Selenium.Core.dll
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\WebDriver.dll
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\WebDriver.Support.dll
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\Selenium.WebDriverBackedSelenium.pdb
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\Selenium.WebDriverBackedSelenium.xml
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\ThoughtWorks.Selenium.Core.pdb
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\ThoughtWorks.Selenium.Core.xml
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\WebDriver.pdb
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\WebDriver.xml
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\WebDriver.Support.pdb
+D:\inputdata\Новая папка\Task2\Task2\bin\Debug\WebDriver.Support.xml
+D:\inputdata\Новая папка\Task2\Task2\obj\Debug\Task2.csprojResolveAssemblyReference.cache
+D:\inputdata\Новая папка\Task2\Task2\obj\Debug\Task2.dll
+D:\inputdata\Новая папка\Task2\Task2\obj\Debug\Task2.pdb
+D:\inputdata\Task2\Task2\bin\Debug\Task2.dll
+D:\inputdata\Task2\Task2\bin\Debug\Task2.pdb
+D:\inputdata\Task2\Task2\bin\Debug\Selenium.WebDriverBackedSelenium.dll
+D:\inputdata\Task2\Task2\bin\Debug\ThoughtWorks.Selenium.Core.dll
+D:\inputdata\Task2\Task2\bin\Debug\WebDriver.dll
+D:\inputdata\Task2\Task2\bin\Debug\WebDriver.Support.dll
+D:\inputdata\Task2\Task2\bin\Debug\Selenium.WebDriverBackedSelenium.pdb
+D:\inputdata\Task2\Task2\bin\Debug\Selenium.WebDriverBackedSelenium.xml
+D:\inputdata\Task2\Task2\bin\Debug\ThoughtWorks.Selenium.Core.pdb
+D:\inputdata\Task2\Task2\bin\Debug\ThoughtWorks.Selenium.Core.xml
+D:\inputdata\Task2\Task2\bin\Debug\WebDriver.pdb
+D:\inputdata\Task2\Task2\bin\Debug\WebDriver.xml
+D:\inputdata\Task2\Task2\bin\Debug\WebDriver.Support.pdb
+D:\inputdata\Task2\Task2\bin\Debug\WebDriver.Support.xml
+D:\inputdata\Task2\Task2\obj\Debug\Task2.dll
+D:\inputdata\Task2\Task2\obj\Debug\Task2.pdb
+D:\inputdata\Task2\Task2\obj\Debug\Task2.csprojResolveAssemblyReference.cache
