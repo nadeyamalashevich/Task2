@@ -4,41 +4,49 @@ using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
 using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.IE;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections;
+using System.Configuration;
 
 namespace Task2
 {
     [TestClass]
     public class OnlinerTests
     {
-        private IWebDriver chromeDriver;
-        private FirefoxDriver firefoxDriver;
-        private IWebDriver explorerDriver;
+        private IWebDriver chromeDriver = null;
+        private IWebDriver firefoxDriver = null;
+        private IWebDriver explorerDriver = null;
 
         private void CatalogTest(IWebDriver driver)
         {
             driver.Navigate().GoToUrl("http://onliner.by/");
 
-            IWebElement enterElem = driver.FindElement(By.XPath(@"//*[@id=""userbar""]/div[2]/div[1]"));
+            String enterByXpath = ConfigurationManager.AppSettings["enterByXpath"];
+            IWebElement enterElem = driver.FindElement(By.XPath(enterByXpath));
             enterElem.Click();
-
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            wait.Until(d => d.FindElement(By.CssSelector(@"#auth-container__forms > div > div.auth-box__field > form > div:nth-child(1) > div:nth-child(1) > input")));
             
-            IWebElement emailElem = driver.FindElement(By.CssSelector(@"#auth-container__forms > div > div.auth-box__field > form > div:nth-child(1) > div:nth-child(1) > input"));
-            IWebElement passwordElem = driver.FindElement(By.CssSelector(@"#auth-container__forms > div > div.auth-box__field > form > div:nth-child(1) > div:nth-child(2) > input"));
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+            String emailByCss = ConfigurationManager.AppSettings["emailByCss"];
+            wait.Until(d => d.FindElement(By.CssSelector(emailByCss)));
+            
+            IWebElement emailElem = driver.FindElement(By.CssSelector(emailByCss));
+            String passwordByCss = ConfigurationManager.AppSettings["passwordByCss"];
+            IWebElement passwordElem = driver.FindElement(By.CssSelector(passwordByCss));
             emailElem.SendKeys(@"9nadeya15@mail.ru");
             passwordElem.SendKeys(@"nadeya");
-            
-            IWebElement submitElem = driver.FindElement(By.XPath(@"//*[@id=""auth-container__forms""]/div/div[2]/form/div[4]/div/button"));
+
+            String submitByXpath = ConfigurationManager.AppSettings["submitByXpath"];
+            IWebElement submitElem = driver.FindElement(By.XPath(submitByXpath));
             submitElem.Click();
 
-            wait.Until(d => d.FindElement(By.XPath(@"//*[@id=""userbar""]/div[1]/p/a")));
-            wait.Until(d => d.FindElement(By.ClassName("catalog-bar__item")));
+            String userbarByXpath = ConfigurationManager.AppSettings["userbarByXpath"];
+            wait.Until(d => d.FindElement(By.XPath(userbarByXpath)));
+            String catalogbarByClass = ConfigurationManager.AppSettings["catalogbarByClass"];
+            wait.Until(d => d.FindElement(By.ClassName(catalogbarByClass)));
 
-            ReadOnlyCollection<IWebElement> catalog = driver.FindElements(By.ClassName("catalog-bar__item"));
+            ReadOnlyCollection<IWebElement> catalog = driver.FindElements(By.ClassName(catalogbarByClass));
             Random random = new Random();
             int catalogItemNumber = random.Next(0, catalog.Count - 1);
             IEnumerator catalogEnum = catalog.GetEnumerator();
@@ -51,12 +59,14 @@ namespace Task2
             String catalogItemText = String.Copy(catalogItem.Text);
             catalogItem.Click();
 
-            wait.Until(d => d.FindElement(By.ClassName("schema-header__title")));
+            String headerByClass = ConfigurationManager.AppSettings["headerByClass"];
+            wait.Until(d => d.FindElement(By.ClassName(headerByClass)));
 
-            IWebElement headerTitle = driver.FindElement(By.ClassName("schema-header__title"));
+            IWebElement headerTitle = driver.FindElement(By.ClassName(headerByClass));
             Assert.AreEqual(catalogItemText, headerTitle.Text);
 
-            IWebElement exitElem = driver.FindElement(By.XPath(@"//*[@id=""userbar""]/div[1]/a"));
+            String exitByXpath = ConfigurationManager.AppSettings["exitByXpath"];
+            IWebElement exitElem = driver.FindElement(By.XPath(exitByXpath));
             exitElem.Click();
         }
 
@@ -64,6 +74,7 @@ namespace Task2
         public void DriverInitializer()
         {
             chromeDriver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory);
+            //explorerDriver = new InternetExplorerDriver(AppDomain.CurrentDomain.BaseDirectory, new InternetExplorerOptions(), new TimeSpan(0, 10, 0));
             //firefoxDriver = new FirefoxDriver();
         }
 
@@ -88,7 +99,18 @@ namespace Task2
         [TestCleanup]
         public void DisposeDriver()
         {
-            chromeDriver.Quit();
+            try
+            {
+                if (chromeDriver != null)
+                    chromeDriver.Quit();
+                if (firefoxDriver != null)
+                    firefoxDriver.Quit();
+                if (explorerDriver != null)
+                    explorerDriver.Quit();
+            }
+            catch
+            {
+            }
         }
     }
 }

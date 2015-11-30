@@ -39,6 +39,7 @@
       <HintPath>..\Seleniun\Selenium.WebDriverBackedSelenium.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="ThoughtWorks.Selenium.Core">
       <HintPath>..\Seleniun\ThoughtWorks.Selenium.Core.dll</HintPath>
     </Reference>
@@ -64,6 +65,9 @@
   <ItemGroup>
     <Compile Include="OnlinerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

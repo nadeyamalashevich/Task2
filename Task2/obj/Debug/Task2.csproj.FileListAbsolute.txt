@@ -32,3 +32,4 @@ D:\inputdata\Task2\Task2\bin\Debug\WebDriver.Support.xml
 D:\inputdata\Task2\Task2\obj\Debug\Task2.dll
 D:\inputdata\Task2\Task2\obj\Debug\Task2.pdb
 D:\inputdata\Task2\Task2\obj\Debug\Task2.csprojResolveAssemblyReference.cache
+D:\inputdata\Task2\Task2\bin\Debug\Task2.dll.config
