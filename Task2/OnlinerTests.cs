@@ -14,7 +14,7 @@ namespace Task2
     public class OnlinerTests
     {
         private IWebDriver chromeDriver;
-        private IWebDriver firefoxDriver;
+        private FirefoxDriver firefoxDriver;
         private IWebDriver explorerDriver;
 
         private void CatalogTest(IWebDriver driver)
@@ -26,15 +26,17 @@ namespace Task2
 
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
             wait.Until(d => d.FindElement(By.CssSelector(@"#auth-container__forms > div > div.auth-box__field > form > div:nth-child(1) > div:nth-child(1) > input")));
-
+            
             IWebElement emailElem = driver.FindElement(By.CssSelector(@"#auth-container__forms > div > div.auth-box__field > form > div:nth-child(1) > div:nth-child(1) > input"));
             IWebElement passwordElem = driver.FindElement(By.CssSelector(@"#auth-container__forms > div > div.auth-box__field > form > div:nth-child(1) > div:nth-child(2) > input"));
             emailElem.SendKeys(@"9nadeya15@mail.ru");
             passwordElem.SendKeys(@"nadeya");
+            
             IWebElement submitElem = driver.FindElement(By.XPath(@"//*[@id=""auth-container__forms""]/div/div[2]/form/div[4]/div/button"));
             submitElem.Click();
 
             wait.Until(d => d.FindElement(By.XPath(@"//*[@id=""userbar""]/div[1]/p/a")));
+            wait.Until(d => d.FindElement(By.ClassName("catalog-bar__item")));
 
             ReadOnlyCollection<IWebElement> catalog = driver.FindElements(By.ClassName("catalog-bar__item"));
             Random random = new Random();
@@ -45,7 +47,8 @@ namespace Task2
                 catalogEnum.MoveNext();
             }
             IWebElement catalogItem = (IWebElement)catalogEnum.Current;
-            String catalogItemText = catalogItem.Text;
+            wait.Until(d => catalogItem.Displayed);
+            String catalogItemText = String.Copy(catalogItem.Text);
             catalogItem.Click();
 
             wait.Until(d => d.FindElement(By.ClassName("schema-header__title")));
@@ -69,6 +72,18 @@ namespace Task2
         {
             CatalogTest(chromeDriver);
         }
+
+        //[TestMethod]
+        //public void CatalogTestFirefox()
+        //{
+        //    CatalogTest(firefoxDriver);
+        //}
+
+        //[TestMethod]
+        //public void CatalogTestExplorer()
+        //{
+        //    CatalogTest(explorerDriver);
+        //}
 
         [TestCleanup]
         public void DisposeDriver()
