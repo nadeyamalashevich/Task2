@@ -18,6 +18,7 @@ namespace Task2
         private IWebDriver chromeDriver = null;
         private IWebDriver firefoxDriver = null;
         private IWebDriver explorerDriver = null;
+        private Logger logger;
 
         private readonly String enterByXpath = ConfigurationManager.AppSettings["enterByXpath"];
         private readonly String emailByCss = ConfigurationManager.AppSettings["emailByCss"];
@@ -40,15 +41,19 @@ namespace Task2
 
         private void CatalogTest(IWebDriver driver)
         {
+            logger.Log("Open browser");
+            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
             driver.Navigate().GoToUrl("http://onliner.by/");
 
             IWebElement enterElem = driver.FindElement(By.XPath(enterByXpath));
+            logger.Log("Go to url http://onliner.by/");
             Action<IWebElement> enterAction = new Action<IWebElement>(MouseClick);
             enterAction.Invoke(enterElem);
-            
+
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
             wait.Until(d => d.FindElement(By.CssSelector(emailByCss)));
-            
+            logger.Log("Go to authorization form");
+
             IWebElement emailElem = driver.FindElement(By.CssSelector(emailByCss));
             IWebElement passwordElem = driver.FindElement(By.CssSelector(passwordByCss));
             emailElem.SendKeys(email);
@@ -63,6 +68,7 @@ namespace Task2
 
             wait.Until(d => d.FindElement(By.XPath(userbarByXpath)));
             wait.Until(d => d.FindElement(By.ClassName(catalogbarByClass)));
+            logger.Log("Authorization and go to main page");
 
             ReadOnlyCollection<IWebElement> catalog = driver.FindElements(By.ClassName(catalogbarByClass));
             Random random = new Random();
@@ -78,43 +84,52 @@ namespace Task2
             enterAction.Invoke(catalogItem);
 
             wait.Until(d => d.FindElement(By.ClassName(headerByClass)));
+            logger.Log("Go to catalog item");
 
             IWebElement headerTitle = driver.FindElement(By.ClassName(headerByClass));
             Assert.AreEqual(catalogItemText, headerTitle.Text);
+            if (catalogItemText.Equals(headerTitle.Text))
+                logger.Log("Display correct catalog item");
 
             IWebElement exitElem = driver.FindElement(By.XPath(exitByXpath));
             enterAction.Invoke(exitElem);
-        }
-
-        [TestInitialize]
-        public void DriverInitializer()
-        {
-            chromeDriver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory);
-            //explorerDriver = new InternetExplorerDriver(AppDomain.CurrentDomain.BaseDirectory, new InternetExplorerOptions(), new TimeSpan(0, 10, 0));
-            //firefoxDriver = new FirefoxDriver();
+            logger.Log("log out");
         }
 
         [TestMethod]
         public void CatalogTestChrome()
         {
+            logger = new Logger("CatalogTestLoggerForChrome.txt");
+            chromeDriver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory);
+            logger.Log("Start Chrome testing");
             CatalogTest(chromeDriver);
+            logger.Log("Close browser");
         }
 
-        //[TestMethod]
-        //public void CatalogTestFirefox()
-        //{
-        //    CatalogTest(firefoxDriver);
-        //}
+        [TestMethod]
+        public void CatalogTestFirefox()
+        {
+            logger = new Logger("CatalogTestLoggerForFirefox.txt");
+            firefoxDriver = new FirefoxDriver();
+            logger.Log("Start Firefox testing");
+            CatalogTest(firefoxDriver);
+            logger.Log("Close browser");
+        }
 
-        //[TestMethod]
-        //public void CatalogTestExplorer()
-        //{
-        //    CatalogTest(explorerDriver);
-        //}
+        [TestMethod]
+        public void CatalogTestExplorer()
+        {
+            logger = new Logger("CatalogTestLoggerForExplorer.txt");
+            explorerDriver = new InternetExplorerDriver(AppDomain.CurrentDomain.BaseDirectory, new InternetExplorerOptions(), new TimeSpan(0, 10, 0));
+            logger.Log("Start Explorer testing");
+            CatalogTest(explorerDriver);
+            logger.Log("Close browser");
+        }
 
         [TestCleanup]
         public void DisposeDriver()
         {
+            logger.Dispose();
             try
             {
                 if (chromeDriver != null)
