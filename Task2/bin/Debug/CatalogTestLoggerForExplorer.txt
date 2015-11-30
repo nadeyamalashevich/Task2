@@ -1,9 +1,0 @@
-Start Explorer testing
-Open browser
-Go to url http://onliner.by/
-Go to authorization form
-Authorization and go to main page
-Go to catalog item
-Display correct catalog item
-log out
-Close browser

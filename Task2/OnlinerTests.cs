@@ -18,7 +18,6 @@ namespace Task2
         private IWebDriver chromeDriver = null;
         private IWebDriver firefoxDriver = null;
         private IWebDriver explorerDriver = null;
-        private Logger logger;
 
         private readonly String enterByXpath = ConfigurationManager.AppSettings["enterByXpath"];
         private readonly String emailByCss = ConfigurationManager.AppSettings["emailByCss"];
@@ -39,7 +38,7 @@ namespace Task2
             }
         }
 
-        private void CatalogTest(IWebDriver driver)
+        private void CatalogTest(IWebDriver driver, Logger logger)
         {
             logger.Log("Open browser");
             driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
@@ -99,49 +98,40 @@ namespace Task2
         [TestMethod]
         public void CatalogTestChrome()
         {
-            logger = new Logger("CatalogTestLoggerForChrome.txt");
+            Logger logger = new Logger("CatalogTestLoggerForChrome.txt");
             chromeDriver = new ChromeDriver(AppDomain.CurrentDomain.BaseDirectory);
             logger.Log("Start Chrome testing");
-            CatalogTest(chromeDriver);
+            CatalogTest(chromeDriver, logger);
             logger.Log("Close browser");
+            logger.Dispose();
+            if (chromeDriver != null)
+                chromeDriver.Quit();
         }
 
         [TestMethod]
         public void CatalogTestFirefox()
         {
-            logger = new Logger("CatalogTestLoggerForFirefox.txt");
+            Logger logger = new Logger("CatalogTestLoggerForFirefox.txt");
             firefoxDriver = new FirefoxDriver();
             logger.Log("Start Firefox testing");
-            CatalogTest(firefoxDriver);
+            CatalogTest(firefoxDriver, logger);
             logger.Log("Close browser");
+            logger.Dispose();
+            if (firefoxDriver != null)
+                firefoxDriver.Quit();
         }
 
         [TestMethod]
         public void CatalogTestExplorer()
         {
-            logger = new Logger("CatalogTestLoggerForExplorer.txt");
+            Logger logger = new Logger("CatalogTestLoggerForExplorer.txt");
             explorerDriver = new InternetExplorerDriver(AppDomain.CurrentDomain.BaseDirectory, new InternetExplorerOptions(), new TimeSpan(0, 10, 0));
             logger.Log("Start Explorer testing");
-            CatalogTest(explorerDriver);
+            CatalogTest(explorerDriver, logger);
             logger.Log("Close browser");
-        }
-
-        [TestCleanup]
-        public void DisposeDriver()
-        {
             logger.Dispose();
-            try
-            {
-                if (chromeDriver != null)
-                    chromeDriver.Quit();
-                if (firefoxDriver != null)
-                    firefoxDriver.Quit();
-                if (explorerDriver != null)
-                    explorerDriver.Quit();
-            }
-            catch
-            {
-            }
+            if (explorerDriver != null)
+                explorerDriver.Quit();
         }
     }
 }
