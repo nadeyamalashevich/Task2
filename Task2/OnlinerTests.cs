@@ -19,31 +19,49 @@ namespace Task2
         private IWebDriver firefoxDriver = null;
         private IWebDriver explorerDriver = null;
 
+        private readonly String enterByXpath = ConfigurationManager.AppSettings["enterByXpath"];
+        private readonly String emailByCss = ConfigurationManager.AppSettings["emailByCss"];
+        private readonly String passwordByCss = ConfigurationManager.AppSettings["passwordByCss"];
+        private readonly String submitByXpath = ConfigurationManager.AppSettings["submitByXpath"];
+        private readonly String userbarByXpath = ConfigurationManager.AppSettings["userbarByXpath"];
+        private readonly String catalogbarByClass = ConfigurationManager.AppSettings["catalogbarByClass"];
+        private readonly String headerByClass = ConfigurationManager.AppSettings["headerByClass"];
+        private readonly String exitByXpath = ConfigurationManager.AppSettings["exitByXpath"];
+        private readonly String email = @"9nadeya15@mail.ru";
+        private readonly String password = @"nadeya";
+
+        private void MouseClick(IWebElement button)
+        {
+            if (button != null)
+            {
+                button.Click();
+            }
+        }
+
         private void CatalogTest(IWebDriver driver)
         {
             driver.Navigate().GoToUrl("http://onliner.by/");
 
-            String enterByXpath = ConfigurationManager.AppSettings["enterByXpath"];
             IWebElement enterElem = driver.FindElement(By.XPath(enterByXpath));
-            enterElem.Click();
+            Action<IWebElement> enterAction = new Action<IWebElement>(MouseClick);
+            enterAction.Invoke(enterElem);
             
             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
-            String emailByCss = ConfigurationManager.AppSettings["emailByCss"];
             wait.Until(d => d.FindElement(By.CssSelector(emailByCss)));
             
             IWebElement emailElem = driver.FindElement(By.CssSelector(emailByCss));
-            String passwordByCss = ConfigurationManager.AppSettings["passwordByCss"];
             IWebElement passwordElem = driver.FindElement(By.CssSelector(passwordByCss));
-            emailElem.SendKeys(@"9nadeya15@mail.ru");
-            passwordElem.SendKeys(@"nadeya");
+            emailElem.SendKeys(email);
+            passwordElem.SendKeys(password);
 
-            String submitByXpath = ConfigurationManager.AppSettings["submitByXpath"];
             IWebElement submitElem = driver.FindElement(By.XPath(submitByXpath));
-            submitElem.Click();
+            String submitTypeAttribute = submitElem.GetAttribute("type");
+            if (submitTypeAttribute.Equals("submit"))
+            {
+                enterAction.Invoke(submitElem);
+            }
 
-            String userbarByXpath = ConfigurationManager.AppSettings["userbarByXpath"];
             wait.Until(d => d.FindElement(By.XPath(userbarByXpath)));
-            String catalogbarByClass = ConfigurationManager.AppSettings["catalogbarByClass"];
             wait.Until(d => d.FindElement(By.ClassName(catalogbarByClass)));
 
             ReadOnlyCollection<IWebElement> catalog = driver.FindElements(By.ClassName(catalogbarByClass));
@@ -57,17 +75,15 @@ namespace Task2
             IWebElement catalogItem = (IWebElement)catalogEnum.Current;
             wait.Until(d => catalogItem.Displayed);
             String catalogItemText = String.Copy(catalogItem.Text);
-            catalogItem.Click();
+            enterAction.Invoke(catalogItem);
 
-            String headerByClass = ConfigurationManager.AppSettings["headerByClass"];
             wait.Until(d => d.FindElement(By.ClassName(headerByClass)));
 
             IWebElement headerTitle = driver.FindElement(By.ClassName(headerByClass));
             Assert.AreEqual(catalogItemText, headerTitle.Text);
 
-            String exitByXpath = ConfigurationManager.AppSettings["exitByXpath"];
             IWebElement exitElem = driver.FindElement(By.XPath(exitByXpath));
-            exitElem.Click();
+            enterAction.Invoke(exitElem);
         }
 
         [TestInitialize]
