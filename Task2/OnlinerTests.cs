@@ -41,7 +41,7 @@ namespace Task2
         private void CatalogTest(IWebDriver driver, Logger logger)
         {
             logger.Log("Open browser");
-            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(10));
+            driver.Manage().Timeouts().ImplicitlyWait(TimeSpan.FromSeconds(100));
             driver.Navigate().GoToUrl("http://onliner.by/");
 
             IWebElement enterElem = driver.FindElement(By.XPath(enterByXpath));
